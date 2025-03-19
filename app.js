@@ -7,7 +7,7 @@ process.setMaxListeners(0);
 app.use(cors());
 app.ws("/api/stream", (ws, req) => {
   const rtsp = req.query.rtsp;
-  const resolution = req.query.resolution;
+  const resolution = req.query.resolution || "1280x720";
   const media = req.query.media || "";
   console.log(rtsp);
   console.log(resolution);
@@ -18,7 +18,7 @@ app.ws("/api/stream", (ws, req) => {
     url: `${rtsp}${media ? `?${media}` : ""}`,
     verbose: true,
     transport: "tcp",
-    additionalFlags: ["-s", resolution || "1080x720"],
+    additionalFlags: ["-s", resolution],
   })(ws);
 });
 
