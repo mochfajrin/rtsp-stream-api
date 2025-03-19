@@ -1,13 +1,18 @@
 const express = require("express");
 const cors = require("cors");
+const dotenv = require("dotenv");
 const app = express();
 const { proxy } = require("rtsp-relay")(app);
 
+dotenv.config();
+
+const HOSTNAME = process.env.HOSTNAME || "localhost";
+const PORT = process.env.PORT || 3000;
 process.setMaxListeners(0);
 app.use(cors());
 app.ws("/api/stream", (ws, req) => {
   const rtsp = req.query.rtsp;
-  const resolution = req.query.resolution || "1280x720";
+  const resolution = req.query.resolution || "2688x1520";
   const media = req.query.media || "";
   console.log(rtsp);
   console.log(resolution);
@@ -22,6 +27,6 @@ app.ws("/api/stream", (ws, req) => {
   })(ws);
 });
 
-app.listen(3000, "10.11.70.99", () => {
-  console.log("server running on port 3000");
+app.listen(PORT, HOSTNAME, () => {
+  console.log(`server running on port ${PORT}`);
 });
